@@ -200,3 +200,5 @@ def ask_question():
         'similar_contents': q_sim
     })
 
+if __name__ == '__main__':
+    application.run(debug=True)
