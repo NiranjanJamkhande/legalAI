@@ -1,0 +1,21 @@
+<style>
+    body.dark-mode {
+        background: linear-gradient(135deg, #1e1e1e, #2a2a2a);
+        color: #f4f4f4;
+    }
+    body.dark-mode .container {
+        background: rgba(0, 0, 0, 0.4);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    body.dark-mode textarea,
+    body.dark-mode pre {
+        background: rgba(255, 255, 255, 0.1);
+        color: #f4f4f4;
+    }
+    body.dark-mode input[type="submit"] {
+        background: linear-gradient(135deg, #6b6b6b, #3e3e3e);
+    }
+    body.dark-mode input[type="submit"]:hover {
+        background: linear-gradient(135deg, #3e3e3e, #6b6b6b);
+    }
+</style>
