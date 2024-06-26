@@ -59,21 +59,21 @@ def generate_response(similar_docs, user_query):
 
 
 
-application = Flask(__name__)
-application.config['SECRET_KEY'] = 'HTS'
-Bootstrap(application)
+app = Flask(__name__)
+app.config['SECRET_KEY'] = 'HTS'
+Bootstrap(app)
 
 # Configure upload folder
 UPLOAD_FOLDER = 'uploads/'
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
-application.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 class QueryForm(FlaskForm):
     user_query = StringField('Enter your query:', validators=[DataRequired()])
     submit = SubmitField('Get Response')
 
-@application.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     form = QueryForm()
     return render_template('index.html', form=form)
@@ -101,7 +101,7 @@ conversational_rag_chain = RunnableWithMessageHistory(
 # Notice we don't pass in messages. This creates
 # a RunnableLambda that takes messages as input
 
-@application.route('/submit_case', methods=['POST'])
+@app.route('/submit_case', methods=['POST'])
 def submit_case():
     case_details = request.form.get('case_details', '').strip()
     user_pdf = request.files.get('user_pdf')
@@ -120,7 +120,7 @@ def submit_case():
     if user_pdf and user_pdf.filename != '':
         if user_pdf.filename.endswith('.pdf'):
             filename = secure_filename(user_pdf.filename)
-            filepath = os.path.join(application.config['UPLOAD_FOLDER'], filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
             user_pdf.save(filepath)
 
             loader = PyPDFLoader(filepath)
@@ -141,7 +141,7 @@ def submit_case():
 
 
 
-@application.route('/get_decision', methods=['POST'])
+@app.route('/get_decision', methods=['POST'])
 def get_decision():
     data = request.json
     user_query = data.get('case_details')
@@ -164,7 +164,7 @@ def get_decision():
 
 from langchain_core.messages import AIMessage
 
-@application.route('/ask_question', methods=['POST'])
+@app.route('/ask_question', methods=['POST'])
 def ask_question():
     data = request.json
     user_question = data.get('user_question')
@@ -200,4 +200,4 @@ def ask_question():
         'similar_contents': q_sim
     })
 if __name__ == '__main__':
-    application.run(debug=False, host = '0.0.0.0')
+    app.run(debug=True)
